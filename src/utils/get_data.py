@@ -1,4 +1,3 @@
-"""Download raw datasets from data.gouv.fr and store them locally."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -20,14 +19,6 @@ def _download_file(url: str, destination: Path) -> None:
 
 
 def download_data(force: bool = False) -> Dict[str, Path]:
-    """Download all declared resources.
-
-    Args:
-        force: when True, download files even if they already exist.
-
-    Returns:
-        Mapping between resource name and downloaded file path.
-    """
     downloaded_paths: Dict[str, Path] = {}
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 

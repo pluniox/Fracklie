@@ -1,4 +1,3 @@
-"""Dash application for the road safety dashboard."""
 from __future__ import annotations
 
 from typing import List

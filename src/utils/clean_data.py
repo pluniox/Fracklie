@@ -1,4 +1,3 @@
-"""Transform raw accident data into a cleaned dataset usable by the dashboard."""
 from __future__ import annotations
 
 from functools import lru_cache
@@ -67,7 +66,6 @@ def _worst_severity(usagers: pd.DataFrame) -> pd.DataFrame:
 
 
 def clean_data(force: bool = False) -> pd.DataFrame:
-    """Build the cleaned dataset and store it on disk."""
     download_data(force=force)
     CLEANED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -136,7 +134,6 @@ def clean_data(force: bool = False) -> pd.DataFrame:
 
 @lru_cache
 def load_clean_data() -> pd.DataFrame:
-    """Load the cleaned dataset, generating it if needed."""
     if not CLEANED_FILE.exists():
         return clean_data(force=False)
     return pd.read_csv(CLEANED_FILE, parse_dates=["date"])

@@ -1,4 +1,3 @@
-"""Helper functions shared across the dashboard."""
 from __future__ import annotations
 
 from typing import Iterable, Optional, Sequence, Tuple
@@ -14,7 +13,6 @@ def filter_dataframe(
     surfaces: Optional[Sequence[str]] = None,
     lighting_groups: Optional[Sequence[str]] = None,
 ) -> pd.DataFrame:
-    """Apply all user filters to the dataset."""
     filtered = df
     if date_range and all(date_range):
         start, end = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
@@ -36,5 +34,4 @@ def filter_dataframe(
 
 
 def dataframe_date_bounds(df: pd.DataFrame) -> Tuple[pd.Timestamp, pd.Timestamp]:
-    """Return the min and max dates of a dataframe, ignoring missing values."""
     return df["date"].min(), df["date"].max()
