@@ -1,0 +1,308 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Colors - Pure Dark Theme */
+    --bg-primary: #05050f; /* Deepest blue/black */
+    --bg-secondary: #0f0f23;
+    --bg-card: rgba(15, 15, 35, 0.6); /* More transparent, darker */
+    
+    /* Neon Accents */
+    --accent-primary: #2E93fA;
+    --accent-secondary: #E91E63;
+    --accent-glow: rgba(46, 147, 250, 0.3);
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --success: #00e676;
+    --warning: #ffea00;
+    --danger: #ff1744;
+    
+    /* Spacing */
+    --gap-sm: 8px;
+    --gap-md: 16px;
+    --gap-lg: 24px;
+    
+    /* Effects */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --transition-speed: 0.3s;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--gap-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+}
+
+/* Header */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--gap-md);
+    padding-bottom: var(--gap-md);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.app-title h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.app-subtitle {
+    color: var(--text-secondary);
+    margin: 5px 0 0 0;
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--gap-md);
+    margin-bottom: var(--gap-md);
+}
+
+.kpi-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--gap-md);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-speed);
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow);
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(15, 15, 35, 0.8);
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0.8;
+}
+
+.kpi-label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.kpi-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
+
+/* Controls Panel with Z-Index Fix */
+.controls-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--gap-md);
+    margin-bottom: var(--gap-md);
+    position: relative; /* Essential for z-index stacking */
+    z-index: 20; /* Ensure it stays above charts */
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--gap-md);
+}
+
+.control-item label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* --- DROPDOWN & INPUT STYLES --- */
+
+/* Select Z-Index Fix */
+.Select-menu-outer {
+    background-color: #0f0f23 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    z-index: 9999 !important; /* Force Dropdown on top of everything */
+    position: absolute !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.Select-control {
+    background-color: rgba(0,0,0,0.3) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: var(--text-primary) !important;
+    border-radius: 4px;
+}
+
+.Select-value-label { color: var(--text-primary) !important; }
+.items-center span { color: var(--text-primary); }
+.user-select-none { color: #fff !important; }
+
+
+/* --- DATE PICKER OVERRIDES (Deep Dark Theme) --- */
+
+.DateRangePicker, .DateRangePicker_1, .DateRangePickerInput, .DateRangePickerInput_1 {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.DateInput, .DateInput_1 {
+    background-color: transparent !important;
+}
+
+.DateInput_input, .DateInput_input_1 {
+    background-color: rgba(0,0,0,0.3) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+    padding: 6px 12px !important;
+    font-weight: 500 !important;
+}
+
+.DateInput_input__focused, .DateInput_input_1__focused {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 10px var(--accent-glow) !important;
+}
+
+.DateRangePickerInput_arrow, .DateRangePickerInput_arrow_1 {
+    color: var(--text-secondary) !important;
+}
+
+/* Calendar Popup Theme */
+.DayPicker, .DayPicker_1, 
+.CalendarMonth, .CalendarMonth_1, 
+.CalendarMonthGrid, .CalendarMonthGrid_1 {
+    background-color: var(--bg-primary) !important;
+}
+
+.DayPickerNavigation_button__default, .DayPickerNavigation_button__default_1 {
+    border: 1px solid var(--glass-border) !important;
+    background-color: var(--bg-card) !important;
+}
+
+.DayPickerNavigation_svg__vertical, .DayPickerNavigation_svg__vertical_1 {
+    fill: var(--text-primary) !important;
+}
+
+.CalendarMonth_caption, .CalendarMonth_caption_1 {
+    color: var(--text-primary) !important;
+}
+
+.CalendarDay, .CalendarDay_1 {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+.CalendarDay:hover {
+    background-color: rgba(255,255,255,0.1) !important;
+    border: 1px solid var(--accent-primary) !important;
+}
+
+.CalendarDay__selected, .CalendarDay__selected:active, .CalendarDay__selected:hover {
+    background-color: var(--accent-primary) !important;
+    color: #fff !important;
+    border: 1px solid var(--accent-primary) !important;
+}
+
+.CalendarDay__selected_span, .CalendarDay__selected_span:active, .CalendarDay__selected_span:hover {
+    background-color: rgba(46, 147, 250, 0.3) !important;
+    color: #fff !important;
+    border: 1px solid rgba(46, 147, 250, 0.3) !important;
+}
+
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gap-md);
+    position: relative;
+    z-index: 1; /* Below controls */
+}
+
+.chart-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--gap-md);
+    box-shadow: var(--glass-shadow);
+    transition: border-color var(--transition-speed);
+}
+
+.chart-card:hover {
+    border-color: rgba(255,255,255,0.15);
+}
+
+/* Grid Spans */
+.span-12 { grid-column: span 12; }
+.span-8 { grid-column: span 8; }
+.span-6 { grid-column: span 6; }
+.span-4 { grid-column: span 4; }
+
+@media (max-width: 1200px) {
+    .span-8, .span-6, .span-4 { grid-column: span 12; }
+}
+
+/* Footer */
+.footer {
+    margin-top: var(--gap-lg);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    padding: var(--gap-md);
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
