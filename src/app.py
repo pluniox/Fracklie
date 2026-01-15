@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List, Tuple
 
 import dash
-from dash import Dash, Input, Output, dcc, html
+from dash import Dash, Input, Output, dcc, html # type: ignore
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
@@ -120,13 +120,14 @@ def _density_map(df: pd.DataFrame):
         radius=10,
         hover_data={"agg_label": True, "severity_label": True},
         mapbox_style="carto-darkmatter", # Matches Pure Dark perfectly
-        zoom=4.8,
+        zoom=5,
         center={"lat": 46.6, "lon": 2.5},
         title="CARTE DE CHALEUR",
     )
     fig.update_layout(
         template=THEME["template"],
         paper_bgcolor=THEME["bg_color"],
+        mapbox_zoom=4.8,
         margin={"t": 40, "l": 0, "r": 0, "b": 0},
         font={"color": THEME["text_color"], "family": THEME["font_family"]},
         title_font={"size": 16},
@@ -203,7 +204,6 @@ def create_layout() -> html.Div:
                             html.P("Dashboard Analytique France 2022", className="app-subtitle")
                         ]
                     ),
-                    # Optional: Add GitHub Link or similar in future
                 ]
             ),
 
@@ -229,8 +229,11 @@ def create_layout() -> html.Div:
                                 html.Label("📅 PÉRIODE"),
                                 dcc.DatePickerRange(
                                     id="date-range",
-                                    start_date=DATE_MIN,
-                                    end_date=DATE_MAX,
+                                    min_date_allowed="2022-01-01",
+                                    max_date_allowed="2022-12-31",
+                                    initial_visible_month="2022-01-01",
+                                    start_date="2022-01-01",
+                                    end_date="2022-12-31",
                                     display_format="DD/MM/YYYY",
                                     className="dark-date-picker"
                                 )
@@ -263,6 +266,7 @@ def create_layout() -> html.Div:
                                 dcc.Dropdown(
                                     id="surface-filter",
                                     options=[{"label": l, "value": l} for l in SURFACE_MAPPING.values()],
+                                    value=["Normale"],
                                     multi=True,
                                     placeholder="État chaussée"
                                 )
@@ -283,12 +287,6 @@ def create_layout() -> html.Div:
                     html.Div(dcc.Graph(id="surface-graph", config={"displayModeBar": False}), className="chart-card span-4"),
                 ]
             ),
-
-            # Footer
-            html.Footer(
-                "Source: Bases de données annuelles des accidents corporels de la circulation routière - Année 2022",
-                className="footer"
-            )
         ]
     )
 

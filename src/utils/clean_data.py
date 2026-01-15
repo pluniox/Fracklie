@@ -34,13 +34,32 @@ def _safe_float(value: object) -> Optional[float]:
 def _extract_hour(hrmn_value: object) -> Optional[int]:
     if pd.isna(hrmn_value):
         return None
-    text = str(hrmn_value).split(".")[0].zfill(4)
-    if not text.isdigit():
+    text = str(hrmn_value).strip()
+    if text in {"", "-1", "None", "nan"}:
         return None
+
+    if ":" in text:
+        hour_part = text.split(":", 1)[0].strip()
+        if hour_part.isdigit():
+            hour = int(hour_part)
+            return hour if 0 <= hour <= 23 else None
+
+    if "h" in text or "H" in text:
+        hour_part = text.replace("H", "h").split("h", 1)[0].strip()
+        if hour_part.isdigit():
+            hour = int(hour_part)
+            return hour if 0 <= hour <= 23 else None
+
+    digits = "".join(ch for ch in text.split(".", 1)[0] if ch.isdigit())
+    if not digits:
+        return None
+
+    digits = digits.zfill(4)
     try:
-        return int(text[:2])
+        hour = int(digits[:2])
     except ValueError:
         return None
+    return hour if 0 <= hour <= 23 else None
 
 
 def _lighting_group(lum: Optional[int]) -> str:
@@ -136,7 +155,10 @@ def clean_data(force: bool = False) -> pd.DataFrame:
 def load_clean_data() -> pd.DataFrame:
     if not CLEANED_FILE.exists():
         return clean_data(force=False)
-    return pd.read_csv(CLEANED_FILE, parse_dates=["date"])
+    df = pd.read_csv(CLEANED_FILE, parse_dates=["date"])
+    if "hour" not in df.columns or df["hour"].isna().all():
+        return clean_data(force=False)
+    return df
 
 
 if __name__ == "__main__":
