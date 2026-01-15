@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+if __name__ == "__main__" and __package__ is None:
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 from functools import lru_cache
-from typing import Dict, Optional
+from typing import Any, Optional
 
 import pandas as pd
 
@@ -19,7 +25,7 @@ from config import (
 from src.utils.get_data import download_data
 
 
-def _safe_float(value: object) -> Optional[float]:
+def _safe_float(value: Any) -> Optional[float]:
     if pd.isna(value):
         return None
     text = str(value).strip().replace(",", ".")
@@ -31,7 +37,7 @@ def _safe_float(value: object) -> Optional[float]:
         return None
 
 
-def _extract_hour(hrmn_value: object) -> Optional[int]:
+def _extract_hour(hrmn_value: Any) -> Optional[int]:
     if pd.isna(hrmn_value):
         return None
     text = str(hrmn_value).strip()
@@ -62,7 +68,7 @@ def _extract_hour(hrmn_value: object) -> Optional[int]:
     return hour if 0 <= hour <= 23 else None
 
 
-def _lighting_group(lum: Optional[int]) -> str:
+def _lighting_group(lum: Any) -> str:
     if lum is None or pd.isna(lum):
         return "Non renseigne"
     if lum == 5:
@@ -103,10 +109,10 @@ def clean_data(force: bool = False) -> pd.DataFrame:
     caracteristiques = caracteristiques.rename(columns={"Accident_Id": "Num_Acc"})
     caracteristiques["lat"] = caracteristiques["lat"].apply(_safe_float)
     caracteristiques["long"] = caracteristiques["long"].apply(_safe_float)
-    caracteristiques["date"] = pd.to_datetime(
-        dict(year=caracteristiques["an"], month=caracteristiques["mois"], day=caracteristiques["jour"]),
-        errors="coerce",
+    date_parts = caracteristiques[["an", "mois", "jour"]].rename(
+        columns={"an": "year", "mois": "month", "jour": "day"}
     )
+    caracteristiques["date"] = pd.to_datetime(date_parts, errors="coerce")
     caracteristiques["hour"] = caracteristiques["hrmn"].apply(_extract_hour)
     caracteristiques["agg_label"] = caracteristiques["agg"].map(AGGLO_MAPPING).fillna("Non renseigne")
     caracteristiques["lighting_label"] = caracteristiques["lum"].map(LIGHT_MAPPING).fillna("Non renseigne")
